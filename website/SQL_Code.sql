@@ -1,3 +1,4 @@
+/* Students Table - Victoria Bieganska */
 drop table if exists students;
 
 create table students (
