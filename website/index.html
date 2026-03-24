@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Room Management</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <nav class="navbar">
+        <h1>Library Bookings</h1>
+        <ul>
+          <li><a href="../homepage/index.html">Home</a></li>
+          <li><a href="#">Rooms</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main class="container">
+      <h2>Room Management</h2>
+
+      <section class="form-section">
+        <h3>Add New Room</h3>
+        <form class="room-form">
+          <input type="number" placeholder="Room ID" required />
+          <input type="text" placeholder="Room Name" required />
+          <input type="number" placeholder="Capacity" required />
+          <input type="number" placeholder="Floor" required />
+          <input
+            type="text"
+            placeholder="Availability (Available/Occupied)"
+            required
+          />
+          <button type="submit">Add Room</button>
+        </form>
+      </section>
+
+      <section class="table-section">
+        <h3>All Rooms</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Capacity</th>
+              <th>Floor</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+    </main>
+  </body>
+</html>
