@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CA</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+    <script defer>
+    const SUPABASE_URL = "https://kmgwkyrdimsrvhnngdrw.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZ3dreXJkaW1zcnZobm5nZHJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI4ODI4OTQsImV4cCI6MjA4ODQ1ODg5NH0.pvzNz4GRQ6l7wtmz6iAXSMlz6LlUVOGGKwp19E7HQN0";
+    let supabaseClient;
+
+    window.addEventListener("DOMContentLoaded", async () => {
+        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        await TempFunction();
+        });
+    </script>
+</head>
+<body>
+    <nav class="navbar">
+      <span class="nav-title">Library Bookings</span>
+      <div class="nav-links">
+      <a href="#">Home</a>
+      <a href="#">View</a>
+      <a href="#">Edit</a>
+      <a href="#">Add</a>
+      <a href="#">Remove</a>
+      </div>
+
+    </nav>   
+</body>
+</html>

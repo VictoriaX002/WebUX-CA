@@ -1,0 +1,33 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  background: navy;
+  padding: 30px;
+  margin: 0px;
+}
+
+.nav-title {
+  color: white;
+  font-size: 32px;
+  font-weight: bold;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  margin-left: 20px;
+  font-size: 30px;
+  font-weight: bold;
+  padding: 8px 15px;
+  border-radius: 5px;
+  transition: 0.3s;
+}
+
+.nav-links a:hover {
+  background-color: rgb(0, 119, 255);
+  color: #fff;
+}
+
+body {
+   margin: 0;
+}
