@@ -1,4 +1,6 @@
 /* Students Table - Victoria Bieganska */
+drop table if exists societies;
+drop table if exists events;
 drop table if exists students;
 
 create table students (
