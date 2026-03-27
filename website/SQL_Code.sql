@@ -1,4 +1,5 @@
 /* Students Table - Victoria Bieganska */
+drop table if exists support;
 drop table if exists societies;
 drop table if exists events;
 drop table if exists students;
@@ -54,3 +55,14 @@ VALUES
 ('Music Society', 'Creative', 'For students who enjoy playing instruments and performing music.', 'Tuesday', 'music@college.ie'),
 
 ('Islamic Society', 'Cultural', 'A society that supports Muslim students through events, talks, and community activities.', 'Friday', 'isoc@college.ie');
+
+CREATE TABLE support (
+  id INT PRIMARY key,
+  student_id INT,
+  FOREIGN KEY (student_id) references students (id),
+  feedback_type VARCHAR(255),
+  support_query VARCHAR(255)
+);
+
+INSERT INTO support
+VALUES(1, 1, 'Events', 'Test Query')
