@@ -68,7 +68,6 @@ INSERT INTO support
 VALUES(1, 'Jane Doe', 'Events', 'Test Query')
 
 
-
 /* Students Table - Abdurahman Bouderbala */
 CREATE TABLE rooms (
   room_id SERIAL PRIMARY KEY,
@@ -85,4 +84,4 @@ VALUES
 ('Room C303', 20, 3, 'Occupied'),
 ('Study Pod 1', 2, 1, 'Available'),
 ('Conference Room', 30, 4, 'Available');
-Then save, commit and push.
+
