@@ -66,3 +66,23 @@ CREATE TABLE support (
 
 INSERT INTO support
 VALUES(1, 'Jane Doe', 'Events', 'Test Query')
+
+
+
+/* Students Table - Abdurahman Bouderbala */
+CREATE TABLE rooms (
+  room_id SERIAL PRIMARY KEY,
+  room_name VARCHAR(100) NOT NULL,
+  capacity INT,
+  floor INT,
+  status VARCHAR(50) DEFAULT 'Available'
+);
+
+INSERT INTO rooms (room_name, capacity, floor, status)
+VALUES
+('Room A101', 10, 1, 'Available'),
+('Room B202', 6, 2, 'Available'),
+('Room C303', 20, 3, 'Occupied'),
+('Study Pod 1', 2, 1, 'Available'),
+('Conference Room', 30, 4, 'Available');
+Then save, commit and push.
