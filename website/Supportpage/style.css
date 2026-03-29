@@ -32,8 +32,7 @@ body {
    margin: 0;
 }
 
-/* Heading */
-h1 {
+.table-header h1 {
   text-align: center;
   color: #2c3e50;
 }
@@ -71,4 +70,29 @@ tr:hover {
   margin-top: 12px;
   color: #666;
   font-style: italic;
+}
+
+h1 {
+    font-weight: bold;
+    font-size: 30px;
+    margin: 20px auto;
+    text-align: center;
+}
+
+form {
+    margin: 30px auto;
+    width: 35%;
+    border-radius: 5px ;
+    border: 5px solid lightblue;
+    padding: 10px;
+}
+
+button {
+    background-color: rgb(37, 37, 156);
+    color: white;
+    text-align: center;
+    margin: 20px auto;
+    width: 100%;
+    height: 40px;
+    border-radius: 5px;
 }
