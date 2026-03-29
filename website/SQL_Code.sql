@@ -58,11 +58,11 @@ VALUES
 
 CREATE TABLE support (
   id INT PRIMARY key,
-  student_id INT,
-  FOREIGN KEY (student_id) references students (id),
+  name VARCHAR(255),
   feedback_type VARCHAR(255),
-  support_query VARCHAR(255)
+  support_query VARCHAR(255),
+  date_raised TIMESTAMP DEFAULT(CURRENT_TIMESTAMP)
 );
 
 INSERT INTO support
-VALUES(1, 1, 'Events', 'Test Query')
+VALUES(1, 'Jane Doe', 'Events', 'Test Query')
