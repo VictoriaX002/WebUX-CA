@@ -70,6 +70,48 @@
 
         statusEl.textContent = "";
       }
+
+            // 3) Delete student (Delete the info from the database)
+      async function deleteSupport(id, btnEl) {
+        const statusEl = document.getElementById("status");
+
+        if (!confirm(`Delete Support Query ${id}?`)) return;
+
+        btnEl.disabled = true;
+        statusEl.textContent = "Deleting...";
+
+        try {
+          //  Ask Supabase to return the deleted row
+          // This code removes a specific student from the database using their ID and confirms that the row was deleted.
+          const { data, error } = await supabaseClient
+            .from("support")
+            .delete()
+            .eq("id", id) //
+            .select("id"); // very important to select something to get the deleted row back
+
+          if (error) {
+            console.error("Delete error:", error);
+            statusEl.textContent = "Delete failed: " + (error.message || "");
+            return;
+          }
+
+         // If Supabase deleted 0 rows, do NOT remove from UI
+          if (!data || data.length === 0) {
+            statusEl.textContent =
+              "Not deleted in Supabase (0 rows). Check RLS policy / ID type.";
+            return;
+          }
+
+          // Remove the deleted student's row from the table, shows a confirmation message, and re-enables the button.
+          const rowEl = btnEl.closest("tr");
+          if (rowEl) rowEl.remove();
+
+          statusEl.textContent = "Query deleted ✔";
+          setTimeout(() => (statusEl.textContent = ""), 1200);
+        } finally {
+          btnEl.disabled = false;
+        }
+      }
     </script>
 </head>
 <body>
