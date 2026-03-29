@@ -11,23 +11,94 @@
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZ3dreXJkaW1zcnZobm5nZHJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI4ODI4OTQsImV4cCI6MjA4ODQ1ODg5NH0.pvzNz4GRQ6l7wtmz6iAXSMlz6LlUVOGGKwp19E7HQN0";
     let supabaseClient;
 
-    window.addEventListener("DOMContentLoaded", async () => {
-        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        await TempFunction();
+      window.addEventListener("DOMContentLoaded", async () => {
+        supabaseClient = window.supabase.createClient(
+          SUPABASE_URL,
+          SUPABASE_ANON_KEY
+        );
+        await loadSupport();
+      });
+
+      // 2) Fetch students from Supabase and display in table
+      async function loadSupport() {
+        const tableBody = document.getElementById("support-table");
+        const statusEl = document.getElementById("status");
+
+        tableBody.innerHTML = '<tr><td colspan="4">Loading data…</td></tr>';
+
+        const { data, error } = await supabaseClient
+          .from("support")
+          .select("id, student_id, feedback_type, support_query")
+          .order("id", { ascending: true });
+
+        if (error) {
+          tableBody.innerHTML =
+            '<tr><td colspan="4">Error loading data</td></tr>';
+          statusEl.textContent = error.message;
+          return;
+        }
+
+        if (!data || data.length === 0) {
+          tableBody.innerHTML =
+            '<tr><td colspan="4">No Support querys found</td></tr>';
+          statusEl.textContent = "Tip: Add support requests in Supabase Table Editor.";
+          return;
+        }
+
+        tableBody.innerHTML = "";
+        data.forEach((support, index) => { // for each student, create a table row with a delete button
+          const row = document.createElement("tr");
+
+          row.innerHTML = `
+            <td>${support.id ?? ""}</td>
+            <td>${support.student_id ?? ""}</td>
+            <td>${support.feedback_type ?? ""}</td>
+            <td>${support.support_query ?? ""}</td>
+            <td> 
+                <button class="btn-delete"onclick="deleteStudent(${
+                  support.id
+                }, this)"> Delete </button>    
+            </td>
+          `;
+
+          tableBody.appendChild(row);
         });
+
+        statusEl.textContent = "";
+      }
     </script>
 </head>
 <body>
     <nav class="navbar">
-      <span class="nav-title">Library Bookings</span>
+      <span class="nav-title">Placeholder</span>
       <div class="nav-links">
       <a href="#">Home</a>
-      <a href="#">View</a>
-      <a href="#">Edit</a>
-      <a href="#">Add</a>
-      <a href="#">Remove</a>
+      <a href="#">Events</a>
+      <a href="#">Societies</a>
+      <a href="#">Support</a>
       </div>
 
     </nav>   
+
+        <h1>Support Queries</h1>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Query ID</th>
+          <th>Student ID</th>
+          <th>Feedback_Type</th>
+          <th>Query</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="support-table">
+        <tr>
+          <td colspan="4">Loading data…</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div id="status" class="status"></div>
 </body>
 </html>
