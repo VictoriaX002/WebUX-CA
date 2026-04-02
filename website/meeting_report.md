@@ -26,7 +26,7 @@
 - **Societies** Bouchra
 - **Events** (linked to Societies) Haya
 - **Support Services**Victoria
-- **News**Peace
+- **Student Marketplace**Peace
 - **Rooms** Abdurahman
 
 ---
