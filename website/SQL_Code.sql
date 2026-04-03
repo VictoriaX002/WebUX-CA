@@ -64,8 +64,8 @@ CREATE TABLE support (
   date_raised TIMESTAMP DEFAULT(CURRENT_TIMESTAMP)
 );
 
-INSERT INTO support
-VALUES(1, 'Jane Doe', 'Events', 'Test Query')
+INSERT INTO support (id, name, feedback_type, support_query)
+VALUES (1, 'Jane Doe', 'Events', 'Test Query');
 
 
 /* Students Table - Abdurahman Bouderbala */
@@ -85,3 +85,23 @@ VALUES
 ('Study Pod 1', 2, 1, 'Available'),
 ('Conference Room', 30, 4, 'Available');
 
+
+/* Student Marketplace - Peace Azeta */
+DROP TABLE IF EXISTS products;
+
+CREATE TABLE products (
+  id SERIAL PRIMARY KEY,
+  title VARCHAR(255) NOT NULL,
+  description TEXT,
+  price DECIMAL,
+  student_id INT,
+  is_deleted BOOLEAN DEFAULT FALSE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (student_id) REFERENCES students(id)
+);
+
+INSERT INTO products (title, description, price, student_id)
+VALUES
+('Laptop', 'Good condition, barely used', 500, 1),
+('Phone', 'iPhone 11', 250, 2),
+('Headphones', 'Noise cancelling', 100, 3);
