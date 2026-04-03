@@ -102,6 +102,6 @@ CREATE TABLE products (
 
 INSERT INTO products (title, description, price, student_id)
 VALUES
-('Laptop', 'Good condition, barely used', 500, 1),
-('Phone', 'iPhone 11', 250, 2),
-('Headphones', 'Noise cancelling', 100, 3);
+('Laptop', 'Good condition', 500, 1),
+('Notebook', 'With notes', 20, 2),
+('Sweater', 'Brand new', 33, 3);
