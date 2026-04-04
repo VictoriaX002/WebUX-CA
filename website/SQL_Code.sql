@@ -87,19 +87,18 @@ VALUES
 
 
 /* Student Marketplace - Peace Azeta */
-DROP TABLE IF EXISTS products;
 
-CREATE TABLE products (
+CREATE TABLE IF NOT EXISTS products (
   id SERIAL PRIMARY KEY,
-  title VARCHAR(255) NOT NULL,
+  title TEXT NOT NULL,
   description TEXT,
-  price DECIMAL,
+  price NUMERIC,
   student_id INT,
   is_deleted BOOLEAN DEFAULT FALSE,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (student_id) REFERENCES students(id)
 );
-
+/* Sample data */
 INSERT INTO products (title, description, price, student_id)
 VALUES
 ('Laptop', 'Good condition', 500, 1),
