@@ -87,7 +87,6 @@ VALUES
 
 
 /* Student Marketplace - Peace Azeta */
-
 CREATE TABLE IF NOT EXISTS products (
   id SERIAL PRIMARY KEY,
   title TEXT NOT NULL,
@@ -98,6 +97,7 @@ CREATE TABLE IF NOT EXISTS products (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (student_id) REFERENCES students(id)
 );
+
 /* Sample data */
 INSERT INTO products (title, description, price, student_id)
 VALUES
