@@ -34,7 +34,7 @@
 ## Decisions Made
 - Societies will be connected to Events (one-to-many relationship)
 - Each team member will create at least one webpage
-- Each member will their SQL for the table and Victoria will add them all into one subabase project. 
--each member need to come up with their own idea for website page
+- Each member will add their SQL script for their table and Victoria will add them all into one subabase project. 
+- Each member need to come up with their own idea for a website page
 
 ---
