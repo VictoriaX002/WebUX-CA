@@ -30,8 +30,30 @@ create table events (
   event_time TIME,
   event_location VARCHAR(255),
   society_id INT,
-/*  FOREIGN KEY (society_id) REFERENCES departments(dept_id) */
-)
+  FOREIGN KEY (society_id) REFERENCES societies(society_id) 
+);
+
+INSERT INTO events (event_id, event_name, event_date, event_time, event_location, society_id)
+VALUES
+(1, 'Gaming Tournament Night', '2026-04-15', '18:00:00', 'Main Hall', 1),
+
+(2, 'AI & Machine Learning Workshop', '2026-04-18', '14:00:00', 'Lab 2', 2),
+
+(3, 'Inter-Society Football Match', '2026-04-20', '16:30:00', 'Sports मैदान', 3),
+
+(4, 'Art Exhibition Showcase', '2026-04-22', '12:00:00', 'Art Studio', 4),
+
+(5, 'Live Music Jam Session', '2026-04-25', '19:00:00', 'Auditorium', 5);
+
+CREATE TABLE applications (
+  application_id INT PRIMARY KEY,
+  student_id INT,
+  event_id INT,
+  application_date DATE,
+  status VARCHAR(50),
+  FOREIGN KEY (student_id) REFERENCES students(id),
+  FOREIGN KEY (event_id) REFERENCES events(event_id)
+);
 
 CREATE TABLE societies (
     society_id SERIAL PRIMARY KEY,
