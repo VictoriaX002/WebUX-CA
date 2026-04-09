@@ -3,18 +3,125 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CA</title>
+    <title>Society Events Portal</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+      <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
     <script defer>
     const SUPABASE_URL = "https://kmgwkyrdimsrvhnngdrw.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZ3dreXJkaW1zcnZobm5nZHJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI4ODI4OTQsImV4cCI6MjA4ODQ1ODg5NH0.pvzNz4GRQ6l7wtmz6iAXSMlz6LlUVOGGKwp19E7HQN0";
     let supabaseClient;
 
-    window.addEventListener("DOMContentLoaded", async () => {
-        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        await TempFunction();
+      window.addEventListener("DOMContentLoaded", async () => {
+        supabaseClient = window.supabase.createClient(
+          SUPABASE_URL,
+          SUPABASE_ANON_KEY
+        );
+        await loadEvents();
+      });
+
+      // 2) Fetch students from Supabase and display in table
+      async function loadEvents() {
+        const tableBody = document.getElementById("eventsTableBody");
+        const statusEl = document.getElementById("status");
+
+        tableBody.innerHTML = '<tr><td colspan="4">Loading data…</td></tr>';
+
+        const { data, error } = await supabaseClient
+  .from("events")
+  .select(`
+    event_id,
+    event_name,
+    event_date,
+    event_time,
+    event_location,
+    societies (
+      society_name
+    )
+  `)
+  .order("event_id", { ascending: true });
+
+        if (error) {
+          tableBody.innerHTML =
+            '<tr><td colspan="4">Error loading data</td></tr>';
+          statusEl.textContent = error.message;
+          return;
+        }
+
+        if (!data || data.length === 0) {
+          tableBody.innerHTML =
+            '<tr><td colspan="4">No Support querys found</td></tr>';
+          statusEl.textContent = "Tip: Add support requests in Supabase Table Editor.";
+          return;
+        }
+
+        tableBody.innerHTML = "";
+        data.forEach((event, index) => { // for each student, create a table row with a delete button
+          const row = document.createElement("tr");
+          const d = new Date(support.date_raised);
+          const formatted = d.toLocaleString();
+          console.log(formatted)
+
+          row.innerHTML = `
+            <td>${event.event_id ?? ""}</td>
+            <td>${event.event_name ?? ""}</td>
+            <td>${event.societies?.society_name ?? "No Society"}</td>
+            <td>${event.event_date ?? ""}</td>
+            <td>${event.event_time ?? ""}</td>
+            <td>${formatted ?? ""}</td>
+            <td> 
+                <button class="btn-delete"onclick="deleteSupport(${
+                  event.event_id
+                }, this)"> Delete </button>    
+            </td>
+          `;
+
+          tableBody.appendChild(row);
         });
+
+        statusEl.textContent = "";
+      }
+
+            // 3) Delete student (Delete the info from the database)
+      async function deleteSupport(id, btnEl) {
+        const statusEl = document.getElementById("status");
+
+        if (!confirm(`Delete Support Query ${id}?`)) return;
+
+        btnEl.disabled = true;
+        statusEl.textContent = "Deleting...";
+
+        try {
+          //  Ask Supabase to return the deleted row
+          // This code removes a specific student from the database using their ID and confirms that the row was deleted.
+          const { data, error } = await supabaseClient
+            .from("support")
+            .delete()
+            .eq("id", id) //
+            .select("id"); // very important to select something to get the deleted row back
+
+          if (error) {
+            console.error("Delete error:", error);
+            statusEl.textContent = "Delete failed: " + (error.message || "");
+            return;
+          }
+
+         // If Supabase deleted 0 rows, do NOT remove from UI
+          if (!data || data.length === 0) {
+            statusEl.textContent =
+              "Not deleted in Supabase (0 rows). Check RLS policy / ID type.";
+            return;
+          }
+
+          // Remove the deleted student's row from the table, shows a confirmation message, and re-enables the button.
+          const rowEl = btnEl.closest("tr");
+          if (rowEl) rowEl.remove();
+
+          statusEl.textContent = "Query deleted ✔";
+          setTimeout(() => (statusEl.textContent = ""), 1200);
+        } finally {
+          btnEl.disabled = false;
+        }
+      }
     </script>
 </head>
 <body>
@@ -26,7 +133,28 @@
       <a href="#">Societies</a>
       <a href="../rooms/index.html">Library</a>
       <a href="../Supportpage/index.html">Support</a>
-
+      </div>
     </nav>   
+<div class="container">
+  <section class="table-section">
+    <h2>Available Events</h2>
+    <p id="status"></p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Society</th>
+          <th>Date</th>
+          <th>Time</th>
+          <th>Location</th>
+        </tr>
+      </thead>
+      <tbody id="eventsTableBody"></tbody>
+    </table>
+  </section>
+</div>
+    
 </body>
 </html>

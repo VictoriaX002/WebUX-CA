@@ -23,7 +23,7 @@ VALUES(3, 'Patric', 'jane', 1274);
 INSERT INTO students
 VALUES(4, 'Ahmed', 'Dal', 9678);
 
-create table events (
+create table events (  /*Haya Darwish */
   event_id INT PRIMARY KEY,
   event_name VARCHAR(255),
   event_date DATE,
@@ -45,7 +45,7 @@ VALUES
 
 (5, 'Live Music Jam Session', '2026-04-25', '19:00:00', 'Auditorium', 5);
 
-CREATE TABLE applications (
+CREATE TABLE applications ( /*Haya Darwish */
   application_id INT PRIMARY KEY,
   student_id INT,
   event_id INT,
