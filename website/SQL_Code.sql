@@ -23,38 +23,6 @@ VALUES(3, 'Patric', 'jane', 1274);
 INSERT INTO students
 VALUES(4, 'Ahmed', 'Dal', 9678);
 
-create table events (  /*Haya Darwish */
-  event_id INT PRIMARY KEY,
-  event_name VARCHAR(255),
-  event_date DATE,
-  event_time TIME,
-  event_location VARCHAR(255),
-  society_id INT,
-  FOREIGN KEY (society_id) REFERENCES societies(society_id) 
-);
-
-INSERT INTO events (event_id, event_name, event_date, event_time, event_location, society_id)
-VALUES
-(1, 'Gaming Tournament Night', '2026-04-15', '18:00:00', 'Main Hall', 1),
-
-(2, 'AI & Machine Learning Workshop', '2026-04-18', '14:00:00', 'Lab 2', 2),
-
-(3, 'Inter-Society Football Match', '2026-04-20', '16:30:00', 'Sports मैदान', 3),
-
-(4, 'Art Exhibition Showcase', '2026-04-22', '12:00:00', 'Art Studio', 4),
-
-(5, 'Live Music Jam Session', '2026-04-25', '19:00:00', 'Auditorium', 5);
-
-CREATE TABLE applications ( /*Haya Darwish */
-  application_id INT PRIMARY KEY,
-  student_id INT,
-  event_id INT,
-  application_date DATE,
-  status VARCHAR(50),
-  FOREIGN KEY (student_id) REFERENCES students(id),
-  FOREIGN KEY (event_id) REFERENCES events(event_id)
-);
-
 CREATE TABLE societies (
     society_id SERIAL PRIMARY KEY,
     society_name VARCHAR(100) NOT NULL,
@@ -126,3 +94,35 @@ VALUES
 ('Laptop', 'Good condition', 500, 1),
 ('Notebook', 'With notes', 20, 2),
 ('Sweater', 'Brand new', 33, 3);
+
+create table events (  /*Haya Darwish */
+  event_id INT PRIMARY KEY,
+  event_name VARCHAR(255),
+  event_date DATE,
+  event_time TIME,
+  event_location VARCHAR(255),
+  society_id INT,
+  FOREIGN KEY (society_id) REFERENCES societies(society_id) 
+);
+
+INSERT INTO events (event_id, event_name, event_date, event_time, event_location, society_id)
+VALUES
+(1, 'Gaming Tournament Night', '2026-04-15', '18:00:00', 'Main Hall', 1),
+
+(2, 'AI & Machine Learning Workshop', '2026-04-18', '14:00:00', 'Lab 2', 2),
+
+(3, 'Inter-Society Football Match', '2026-04-20', '16:30:00', 'Sports मैदान', 3),
+
+(4, 'Art Exhibition Showcase', '2026-04-22', '12:00:00', 'Art Studio', 4),
+
+(5, 'Live Music Jam Session', '2026-04-25', '19:00:00', 'Auditorium', 5);
+
+CREATE TABLE applications ( /*Haya Darwish */
+  application_id INT PRIMARY KEY,
+  student_id INT,
+  event_id INT,
+  application_date DATE,
+  status VARCHAR(50),
+  FOREIGN KEY (student_id) REFERENCES students(id),
+  FOREIGN KEY (event_id) REFERENCES events(event_id)
+);
