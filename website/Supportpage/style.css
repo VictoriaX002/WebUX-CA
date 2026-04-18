@@ -96,3 +96,23 @@ button {
     height: 40px;
     border-radius: 5px;
 }
+
+.btn-edit,
+.btn-delete {
+  min-width: 90px;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  background: #235c96;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-delete:hover {
+  background: #de2e02;
+}
+
+.btn-edit:hover {
+  background: #e6e208;
+}

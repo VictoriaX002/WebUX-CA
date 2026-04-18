@@ -11,12 +11,22 @@
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZ3dreXJkaW1zcnZobm5nZHJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI4ODI4OTQsImV4cCI6MjA4ODQ1ODg5NH0.pvzNz4GRQ6l7wtmz6iAXSMlz6LlUVOGGKwp19E7HQN0";
     let supabaseClient;
 
+    let editingSupportId = null;
+
       window.addEventListener("DOMContentLoaded", async () => {
+        console.log("Before Supabase Client")
         supabaseClient = window.supabase.createClient(
           SUPABASE_URL,
-          SUPABASE_ANON_KEY
+          SUPABASE_ANON_KEY, {
+          auth: {
+            lock: async (name, acquireTimeout, fn) => fn(),}
+          }
         );
+        console.log("After Supabase Client",supabaseClient)
         await loadSupport();
+        document
+        .getElementById("add-btn")
+        .addEventListener("click", addSupport);
       });
 
       // 2) Fetch students from Supabase and display in table
@@ -40,24 +50,29 @@
 
         if (!data || data.length === 0) {
           tableBody.innerHTML =
-            '<tr><td colspan="4">No Support querys found</td></tr>';
+            '<tr><td colspan="4">No Support queries found</td></tr>';
           statusEl.textContent = "Tip: Add support requests in Supabase Table Editor.";
           return;
         }
 
         tableBody.innerHTML = "";
-        data.forEach((support, index) => { // for each student, create a table row with a delete button
+        data.forEach((support, index) => { // for each query, create a table row with a delete button
           const row = document.createElement("tr");
           const d = new Date(support.date_raised);
           const formatted = d.toLocaleString();
           console.log(formatted)
 
           row.innerHTML = `
-            <td>${support.id ?? ""}</td>
-            <td>${support.name ?? ""}</td>
-            <td>${support.feedback_type ?? ""}</td>
-            <td>${support.support_query ?? ""}</td>
+            <td id="td_${support.id ?? ""}">${support.id ?? ""}</td>
+            <td id="td_name_${support.id ?? ""}">${support.name ?? ""}</td>
+            <td id="td_feedbackType_${support.id ?? ""}">${support.feedback_type ?? ""}</td>
+            <td id="td_query_${support.id ?? ""}">${support.support_query ?? ""}</td>
             <td>${formatted ?? ""}</td>
+
+            <td>
+              <button class="btn-edit" onclick="editSupport('${support.id}')"> Edit </button
+            </td>
+
             <td> 
                 <button class="btn-delete"onclick="deleteSupport(${
                   support.id
@@ -71,7 +86,7 @@
         statusEl.textContent = "";
       }
 
-            // 3) Delete student (Delete the info from the database)
+            // 3) Delete support query (Delete the info from the database)
       async function deleteSupport(id, btnEl) {
         const statusEl = document.getElementById("status");
 
@@ -112,6 +127,85 @@
           btnEl.disabled = false;
         }
       }
+
+        async function addSupport() {
+        const statusEl = document.getElementById("status")
+        const nameInput = document.getElementById("name-input")
+        const feedbackTypeSelect = document.getElementById("feedback-type-select")
+        const queryTextArea = document.getElementById("query-text-area")
+
+        const name = nameInput.value.trim();
+        const feedbackType = feedbackTypeSelect.options[feedbackTypeSelect.selectedIndex].text;
+        const query = queryTextArea.value.trim();
+
+        if (!name || !feedbackType || !query) {
+          statusEl.textContent = "Please enter both name and query and choose a feedback type.";
+          return;
+      }
+
+      statusEl.textContent = "Saving..."
+
+      let result;
+      if (editingSupportId) {
+        result = await supabaseClient
+        .from("support")
+        .update({ name, feedback_type:feedbackType, support_query:query })
+        .eq("id", editingSupportId);
+      } else {
+        try {
+        result = await supabaseClient
+        .from("support")
+        .insert([{ name, feedback_type:feedbackType, support_query:query }]);
+        } catch (e){
+          console.log(e)
+        }
+      }
+
+      if (result.error) {
+        statusEl.textContent = "Save failed: " + result.error.message;
+        return;
+      }
+
+
+      editingSupportId = null;
+      nameInput.value = "";
+      // feedback_type will have the first option selected by default (Events)
+      feedbackTypeSelect.selectedIndex = 0;
+      queryTextArea.value = "";
+
+      statusEl.textContent = "Saved ";
+      await loadSupport();
+      }
+
+      function editSupport(supportId) {
+        editingSupportId= supportId;
+
+        const id_td = document.getElementById(`td_${supportId}`)
+        const name_td = document.getElementById(`td_name_${supportId}`)
+        const feedbackType_td = document.getElementById(`td_feedbackType_${supportId}`)
+        const query_td = document.getElementById(`td_query_${supportId}`)
+
+        const name = name_td.innerText
+        const feedbackType = feedbackType_td.innerText
+        const query = query_td.innerText
+
+        const nameInput = document.getElementById("name-input")
+        const feedbackTypeSelect = document.getElementById("feedback-type-select")
+        const queryTextArea = document.getElementById("query-text-area")
+
+        nameInput.value=name
+
+        for (const option of feedbackTypeSelect.options) {
+        if (option.text === feedbackType) {
+          option.selected = true;
+          break;
+            }
+          }
+        queryTextArea.value = query
+
+        document.getElementById("status").textContent = "Editing query...";
+       }
+
     </script>
 </head>
 <body>
@@ -130,17 +224,17 @@
 <h1 class="table-header">Help Request Form</h1>
 <form>
     <label>Name</label><br>
-    <input type="name" placeholder="Enter your name"> <br><br>
+    <input id="name-input" type="name" placeholder="Enter your name"> <br><br>
     <label>Feedback_Type:</label><br>
-    <select>
+    <select id="feedback-type-select">
         <option>Events</option>
         <option>Societies</option>
         <option>Bookings</option>
         <option>Other</option>
     </select><br><br>
     <label>Support Query:</label><br>
-    <textarea rows="5" cols="50" placeholder="Type your query message"></textarea><br><br>
-    <button>Submit</button>
+    <textarea id="query-text-area" rows="5" cols="50" placeholder="Type your query message"></textarea><br><br>
+    <button id="add-btn">Submit</button>
 </form>
 <br><br><br>
 
@@ -154,12 +248,13 @@
           <th>Feedback_Type</th>
           <th>Query</th>
           <th>Date Raised</th>
-          <th>Action</th>
+          <th>Edit</th>
+          <th>Delete</th>
         </tr>
       </thead>
       <tbody id="support-table">
         <tr>
-          <td colspan="4">Loading data…</td>
+          <td colspan="5">Loading data…</td>
         </tr>
       </tbody>
     </table>
