@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+  <title>STUDENT MARKETPLACE</title>
+
+  <style>
+    body {
+      font-family: 'Times New Roman';
+      background: rgb(140, 225, 244);
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    a {
+      display: block;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    #search, #maxPrice {
+      display: block;
+      margin: 10px auto;
+      padding: 10px;
+      width: 300px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+    }
+
+    #product-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: rgb(255, 255, 255);
+      padding: 15px;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    button {
+      margin-top: 10px;
+      margin-right: 5px;
+      background: rgb(2, 20, 188);
+      color: white;
+      border: none;
+      padding: 8px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    button {
+      background: #4a0cf5;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      background: #00c8ff;
+    }
+  </style>
+</head>
+
+<body>
+
+<h1>MARKETPLACE</h1>
+<a href="add.html"><button>ADD PRODUCT</button></a>
+
+<input type="text" id="search" placeholder="Search products...">
+<input type="number" id="maxPrice" placeholder="Max price">
+
+<div id="product-list"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="app.js"></script>
+
+</body>
+</html>
