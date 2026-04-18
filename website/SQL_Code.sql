@@ -47,15 +47,15 @@ VALUES
 ('Islamic Society', 'Cultural', 'A society that supports Muslim students through events, talks, and community activities.', 'Friday', 'isoc@college.ie');
 
 CREATE TABLE support (
-  id INT PRIMARY key,
+  id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   name VARCHAR(255),
   feedback_type VARCHAR(255),
   support_query VARCHAR(255),
   date_raised TIMESTAMP DEFAULT(CURRENT_TIMESTAMP)
 );
 
-INSERT INTO support (id, name, feedback_type, support_query)
-VALUES (1, 'Jane Doe', 'Events', 'Test Query');
+INSERT INTO support (name,feedback_type,support_query)
+VALUES('Jane Doe', 'Events', 'Test Query')
 
 
 /* Students Table - Abdurahman Bouderbala */
