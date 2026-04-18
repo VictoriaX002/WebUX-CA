@@ -150,7 +150,7 @@
         result = await supabaseClient
         .from("support")
         .update({ name, feedback_type:feedbackType, support_query:query })
-        .eq("id", editingSupportId);
+        .eq("id", Number(editingSupportId));
       } else {
         try {
         result = await supabaseClient
