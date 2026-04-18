@@ -22,13 +22,59 @@
       <h2>Room Management</h2>
 
       <section class="form-section">
-        <h3>Add New Room</h3>
+        <h3 id="form-title">Add New Room</h3>
+
         <form class="room-form">
-          <input type="text" placeholder="Room Name" required />
-          <input type="number" placeholder="Capacity" required />
-          <input type="number" placeholder="Floor" required />
-          <input type="text" placeholder="Availability (Available/Occupied)" required />
-          <button type="submit">Add Room</button>
+          <div class="form-group">
+            <label for="roomName">Room Name</label>
+            <input
+              type="text"
+              id="roomName"
+              name="roomName"
+              placeholder="Enter room name"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="capacity">Capacity</label>
+            <input
+              type="number"
+              id="capacity"
+              name="capacity"
+              placeholder="Enter capacity"
+              min="1"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="floor">Floor</label>
+            <input
+              type="number"
+              id="floor"
+              name="floor"
+              placeholder="Enter floor number"
+              min="0"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="status">Availability</label>
+            <select id="status" name="status" required>
+              <option value="">Select status</option>
+              <option value="Available">Available</option>
+              <option value="Occupied">Occupied</option>
+            </select>
+          </div>
+
+          <div class="form-buttons">
+            <button type="submit" id="submitBtn">Add Room</button>
+            <button type="button" id="cancelEdit" class="secondary-btn">
+              Cancel Edit
+            </button>
+          </div>
         </form>
       </section>
 
