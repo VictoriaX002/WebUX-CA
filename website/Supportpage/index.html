@@ -123,7 +123,7 @@
           btnEl.disabled = false;
         }
       }
-
+      
       // 4) In add mode, adds a new row into the database and the table,
       // 4) In edit mode, updates the current values to the edited values in the database and the table
       async function addSupport() {
@@ -212,60 +212,88 @@
     </script>
   </head>
   <body>
-    <nav class="navbar">
-      <span class="nav-title">Placeholder</span>
-      <div class="nav-links">
-        <a href="#">Home</a>
-        <a href="#">Events</a>
-        <a href="#">Societies</a>
-        <a href="#">Support</a>
-      </div>
-    </nav>
+    <header>
+      <nav class="navbar">
+        <h1>Support</h1>
+        <ul>
+          <li><a href="../homepage/index.html">Home</a></li>
+          <li><a href="#">Events</a></li>
+          <li><a href="#">Societies</a></li>
+          <li><a href="#">Rooms</a></li>
+          <li>Support</li>
+        </ul>
+      </nav>
+    </header>
 
-    <h1 class="table-header">Help Request Form</h1>
-    <form>
-      <label>Name</label><br />
-      <input id="name-input" type="name" placeholder="Enter your name" />
-      <br /><br />
-      <label>Feedback_Type:</label><br />
-      <select id="feedback-type-select">
-        <option>Events</option>
-        <option>Societies</option>
-        <option>Bookings</option>
-        <option>Other</option></select
-      ><br /><br />
-      <label>Support Query:</label><br />
-      <textarea
-        id="query-text-area"
-        rows="5"
-        cols="50"
-        placeholder="Type your query message"
-      ></textarea
-      ><br /><br />
-      <button id="add-btn">Submit</button>
-    </form>
-    <br /><br /><br />
+    <main class="container">
+      <h2>Support Desk</h2>
 
-    <h1 class="table-header">Support Queries</h1>
-    <table>
-      <thead>
-        <tr>
-          <th>Query ID</th>
-          <th>Student Name</th>
-          <th>Feedback_Type</th>
-          <th>Query</th>
-          <th>Date Raised</th>
-          <th>Edit</th>
-          <th>Delete</th>
-        </tr>
-      </thead>
-      <tbody id="support-table">
-        <tr>
-          <td colspan="5">Loading data…</td>
-        </tr>
-      </tbody>
-    </table>
+      <section class="form-section">
+        <h3 id="form-title">Submit Help Request</h3>
+
+        <form class="support-form">
+          <div>
+          <div class="form-group">
+            <label for="name-input">Student Name</label>
+            <input
+              type="name"
+              id="name-input"
+              name="name-input"
+              placeholder="Enter your name"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="feedback-type-select">Feedback Type</label>
+            <select id="feedback-type-select">
+              <option>Events</option>
+              <option>Societies</option>
+              <option>Bookings</option>
+              <option>Other</option>
+            </select>
+          </div>
+          </div>
+
+          <div class="form-group">
+            <label for="query-text-area">Support Query:</label>
+            <textarea
+              id="query-text-area"
+              rows="7"
+              cols="50"
+              placeholder="Type your query message"
+            ></textarea>
+          </div>
+
+        <div class="form-buttons">
+            <button id="add-btn">Submit</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="table-section">
+        <h3>Support Queries</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Feedback_Type</th>
+              <th>Query</th>
+              <th>Date Raised</th>
+              <th>Edit</th>
+              <th>Delete</th>
+            </tr>
+          </thead>
+          <tbody id="support-table">
+            <tr>
+              <td colspan="5">Loading data…</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
 
     <div id="status" class="status"></div>
+   </main>
   </body>
 </html>
