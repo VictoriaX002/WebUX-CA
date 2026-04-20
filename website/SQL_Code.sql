@@ -126,3 +126,202 @@ CREATE TABLE applications ( /*Haya Darwish */
   FOREIGN KEY (student_id) REFERENCES students(id),
   FOREIGN KEY (event_id) REFERENCES events(event_id)
 );
+
+
+
+/*Policies*/
+/*Support*/
+alter table public.support enable row level security;
+
+create policy "allow select for anon"
+on public.support
+for select
+to anon
+using (true);
+
+create policy "allow delete for anon"
+on public.support
+for delete
+to anon
+using (true);
+
+create policy "allow update for anon"
+on public.support
+for update
+to anon
+using (true)
+with check (true);
+
+create policy "allow insert for anon"
+on public.support
+for insert
+to anon
+with check (true);
+
+/*Students*/
+alter table public.students enable row level security;
+
+create policy "allow select for anon"
+on public.students
+for select
+to anon
+using (true);
+
+create policy "allow delete for anon"
+on public.students
+for delete
+to anon
+using (true);
+
+create policy "allow update for anon"
+on public.students
+for update
+to anon
+using (true)
+with check (true);
+
+create policy "allow insert for anon"
+on public.students
+for insert
+to anon
+with check (true);
+
+/*Events*/
+alter table public.events enable row level security;
+
+create policy "allow select for anon"
+on public.events
+for select
+to anon
+using (true);
+
+create policy "allow delete for anon"
+on public.events
+for delete
+to anon
+using (true);
+
+create policy "allow update for anon"
+on public.events
+for update
+to anon
+using (true)
+with check (true);
+
+create policy "allow insert for anon"
+on public.events
+for insert
+to anon
+with check (true);
+
+/*Socieites*/
+alter table public.societies enable row level security;
+
+create policy "allow select for anon"
+on public.societies
+for select
+to anon
+using (true);
+
+create policy "allow delete for anon"
+on public.societies
+for delete
+to anon
+using (true);
+
+create policy "allow update for anon"
+on public.societies
+for update
+to anon
+using (true)
+with check (true);
+
+create policy "allow insert for anon"
+on public.societies
+for insert
+to anon
+with check (true);
+
+/*Applications*/
+alter table public.applications enable row level security;
+
+create policy "allow select for anon"
+on public.applications
+for select
+to anon
+using (true);
+
+create policy "allow delete for anon"
+on public.applications
+for delete
+to anon
+using (true);
+
+create policy "allow update for anon"
+on public.applications
+for update
+to anon
+using (true)
+with check (true);
+
+create policy "allow insert for anon"
+on public.applications
+for insert
+to anon
+with check (true);
+
+/*Rooms*/
+alter table public.rooms enable row level security;
+
+create policy "allow select for anon"
+on public.rooms
+for select
+to anon
+using (true);
+
+create policy "allow delete for anon"
+on public.rooms
+for delete
+to anon
+using (true);
+
+create policy "allow update for anon"
+on public.rooms
+for update
+to anon
+using (true)
+with check (true);
+
+create policy "allow insert for anon"
+on public.rooms
+for insert
+to anon
+with check (true);
+
+/*Products*/
+alter table public.products enable row level security;
+
+create policy "allow select for anon"
+on public.products
+for select
+to anon
+using (true);
+
+create policy "allow delete for anon"
+on public.products
+for delete
+to anon
+using (true);
+
+create policy "allow update for anon"
+on public.products
+for update
+to anon
+using (true)
+with check (true);
+
+create policy "allow insert for anon"
+on public.products
+for insert
+to anon
+with check (true);
