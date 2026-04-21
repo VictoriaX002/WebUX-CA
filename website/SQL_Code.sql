@@ -96,7 +96,7 @@ VALUES
 ('Sweater', 'Brand new', 33, 3);
 
 create table events (  /*Haya Darwish */
-  event_id INT PRIMARY KEY,
+  event_id SERIAL PRIMARY KEY,
   event_name VARCHAR(255),
   event_date DATE,
   event_time TIME,
@@ -111,14 +111,14 @@ VALUES
 
 (2, 'AI & Machine Learning Workshop', '2026-04-18', '14:00:00', 'Lab 2', 2),
 
-(3, 'Inter-Society Football Match', '2026-04-20', '16:30:00', 'Sports मैदान', 3),
+(3, 'Inter-Society Football Match', '2026-04-20', '16:30:00', 'Sports', 3),
 
 (4, 'Art Exhibition Showcase', '2026-04-22', '12:00:00', 'Art Studio', 4),
 
 (5, 'Live Music Jam Session', '2026-04-25', '19:00:00', 'Auditorium', 5);
 
 CREATE TABLE applications ( /*Haya Darwish */
-  application_id INT PRIMARY KEY,
+  application_id SERIAL PRIMARY KEY,
   student_id INT,
   event_id INT,
   application_date DATE,

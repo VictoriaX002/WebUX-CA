@@ -1,77 +1,96 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Society Events Portal</title>
-    <link rel="stylesheet" href="style.css">
-      <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Events</title>
+    <link rel="stylesheet" href="style.css" />
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+      defer
+    ></script>
+
     <script defer>
-    const SUPABASE_URL = "https://kmgwkyrdimsrvhnngdrw.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZ3dreXJkaW1zcnZobm5nZHJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI4ODI4OTQsImV4cCI6MjA4ODQ1ODg5NH0.pvzNz4GRQ6l7wtmz6iAXSMlz6LlUVOGGKwp19E7HQN0";
-    let supabaseClient;
+      const SUPABASE_URL = "https://kmgwkyrdimsrvhnngdrw.supabase.co";
+      const SUPABASE_ANON_KEY =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZ3dreXJkaW1zcnZobm5nZHJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI4ODI4OTQsImV4cCI6MjA4ODQ1ODg5NH0.pvzNz4GRQ6l7wtmz6iAXSMlz6LlUVOGGKwp19E7HQN0";
+
+      let supabaseClient;
+      let editingApplicationId = null;
 
       window.addEventListener("DOMContentLoaded", async () => {
         supabaseClient = window.supabase.createClient(
           SUPABASE_URL,
           SUPABASE_ANON_KEY
         );
+
         await loadEvents();
+        await loadApplications();
+
+        document
+          .getElementById("submit-btn")
+          .addEventListener("click", saveApplication);
+
+        document
+          .getElementById("clear-btn")
+          .addEventListener("click", clearForm);
+
+        document
+          .getElementById("page-jump")
+          .addEventListener("change", jumpToSection);
       });
 
-      // 2) Fetch students from Supabase and display in table
+      function jumpToSection() {
+        const target = document.getElementById("page-jump").value;
+        if (!target) return;
+        document.querySelector(target).scrollIntoView({ behavior: "smooth" });
+      }
+
       async function loadEvents() {
-        const tableBody = document.getElementById("eventsTableBody");
+        const tableBody = document.getElementById("events-table");
         const statusEl = document.getElementById("status");
 
-        tableBody.innerHTML = '<tr><td colspan="4">Loading data…</td></tr>';
+        tableBody.innerHTML =
+          '<tr><td colspan="7">Loading events...</td></tr>';
 
         const { data, error } = await supabaseClient
-  .from("events")
-  .select(`
-    event_id,
-    event_name,
-    event_date,
-    event_time,
-    event_location,
-    societies (
-      society_name
-    )
-  `)
-  .order("event_id", { ascending: true });
+          .from("events")
+          .select(
+            "event_id, event_name, event_date, event_time, event_location, society_id"
+          )
+          .order("event_id", { ascending: true });
 
         if (error) {
           tableBody.innerHTML =
-            '<tr><td colspan="4">Error loading data</td></tr>';
-          statusEl.textContent = error.message;
+            '<tr><td colspan="7">Error loading events</td></tr>';
+          statusEl.textContent = "Failed to load events: " + error.message;
           return;
         }
 
         if (!data || data.length === 0) {
           tableBody.innerHTML =
-            '<tr><td colspan="4">No Support querys found</td></tr>';
-          statusEl.textContent = "Tip: Add support requests in Supabase Table Editor.";
+            '<tr><td colspan="7">No events found</td></tr>';
+          statusEl.textContent = "No events available.";
           return;
         }
 
         tableBody.innerHTML = "";
-        data.forEach((event, index) => { // for each student, create a table row with a delete button
+
+        data.forEach((eventItem) => {
           const row = document.createElement("tr");
-          const d = new Date(support.date_raised);
-          const formatted = d.toLocaleString();
-          console.log(formatted)
 
           row.innerHTML = `
-            <td>${event.event_id ?? ""}</td>
-            <td>${event.event_name ?? ""}</td>
-            <td>${event.societies?.society_name ?? "No Society"}</td>
-            <td>${event.event_date ?? ""}</td>
-            <td>${event.event_time ?? ""}</td>
-            <td>${formatted ?? ""}</td>
-            <td> 
-                <button class="btn-delete"onclick="deleteSupport(${
-                  event.event_id
-                }, this)"> Delete </button>    
+            <td>${eventItem.event_id ?? ""}</td>
+            <td>${eventItem.event_name ?? ""}</td>
+            <td>${eventItem.event_date ?? ""}</td>
+            <td>${formatTime(eventItem.event_time)}</td>
+            <td>${eventItem.event_location ?? ""}</td>
+            <td>${eventItem.society_id ?? ""}</td>
+            <td>
+              <button class="btn-apply" onclick="applyForEvent(${eventItem.event_id})">
+                Apply
+              </button>
             </td>
           `;
 
@@ -81,80 +100,356 @@
         statusEl.textContent = "";
       }
 
-            // 3) Delete student (Delete the info from the database)
-      async function deleteSupport(id, btnEl) {
+      function applyForEvent(eventId) {
+        document.getElementById("event-id").value = eventId;
+        document.getElementById("application-status").value = "Pending";
+
+        const today = new Date().toISOString().split("T")[0];
+        document.getElementById("application-date").value = today;
+
+        document
+          .getElementById("apply-section")
+          .scrollIntoView({ behavior: "smooth" });
+
+        document.getElementById("status").textContent =
+          "Selected event " + eventId + ". Complete the form and submit.";
+      }
+
+      async function loadApplications() {
+        const tableBody = document.getElementById("applications-table");
         const statusEl = document.getElementById("status");
 
-        if (!confirm(`Delete Support Query ${id}?`)) return;
+        tableBody.innerHTML =
+          '<tr><td colspan="7">Loading applications...</td></tr>';
+
+        const { data, error } = await supabaseClient
+          .from("applications")
+          .select(
+            "application_id, student_id, event_id, application_date, status"
+          )
+          .order("application_id", { ascending: true });
+
+        if (error) {
+          tableBody.innerHTML =
+            '<tr><td colspan="7">Error loading applications</td></tr>';
+          statusEl.textContent =
+            "Failed to load applications: " + error.message;
+          return;
+        }
+
+        if (!data || data.length === 0) {
+          tableBody.innerHTML =
+            '<tr><td colspan="7">No applications found</td></tr>';
+          statusEl.textContent = "";
+          return;
+        }
+
+        tableBody.innerHTML = "";
+
+        data.forEach((application) => {
+          const row = document.createElement("tr");
+
+          row.innerHTML = `
+            <td id="td_app_id_${application.application_id}">
+              ${application.application_id ?? ""}
+            </td>
+            <td id="td_student_id_${application.application_id}">
+              ${application.student_id ?? ""}
+            </td>
+            <td id="td_event_id_${application.application_id}">
+              ${application.event_id ?? ""}
+            </td>
+            <td id="td_app_date_${application.application_id}">
+              ${application.application_date ?? ""}
+            </td>
+            <td id="td_status_${application.application_id}">
+              ${application.status ?? ""}
+            </td>
+            <td>
+              <button class="btn-edit" onclick="editApplication(${application.application_id})">
+                Edit
+              </button>
+            </td>
+            <td>
+              <button class="btn-delete" onclick="deleteApplication(${application.application_id}, this)">
+                Delete
+              </button>
+            </td>
+          `;
+
+          tableBody.appendChild(row);
+        });
+
+        statusEl.textContent = "";
+      }
+
+      async function saveApplication(event) {
+        event.preventDefault();
+
+        const statusEl = document.getElementById("status");
+
+        const studentId = document.getElementById("student-id").value.trim();
+        const eventId = document.getElementById("event-id").value.trim();
+        const applicationDate =
+          document.getElementById("application-date").value;
+        const applicationStatus =
+          document.getElementById("application-status").value;
+
+        if (!studentId || !eventId || !applicationDate || !applicationStatus) {
+          statusEl.textContent = "Please complete all fields.";
+          return;
+        }
+
+        statusEl.textContent = "Saving application...";
+
+        let result;
+
+        if (editingApplicationId !== null) {
+          result = await supabaseClient
+            .from("applications")
+            .update({
+              student_id: Number(studentId),
+              event_id: Number(eventId),
+              application_date: applicationDate,
+              status: applicationStatus,
+            })
+            .eq("application_id", editingApplicationId);
+        } else {
+          result = await supabaseClient
+            .from("applications")
+            .insert([
+              {
+                student_id: Number(studentId),
+                event_id: Number(eventId),
+                application_date: applicationDate,
+                status: applicationStatus,
+              },
+            ]);
+        }
+
+        if (result.error) {
+          statusEl.textContent = "Save failed: " + result.error.message;
+          return;
+        }
+
+        clearForm();
+        await loadApplications();
+        statusEl.textContent =
+          editingApplicationId === null
+            ? "Application submitted successfully."
+            : "Application updated successfully.";
+      }
+
+      function editApplication(applicationId) {
+        editingApplicationId = applicationId;
+
+        document.getElementById("student-id").value =
+          document.getElementById(`td_student_id_${applicationId}`).innerText.trim();
+
+        document.getElementById("event-id").value =
+          document.getElementById(`td_event_id_${applicationId}`).innerText.trim();
+
+        document.getElementById("application-date").value =
+          document.getElementById(`td_app_date_${applicationId}`).innerText.trim();
+
+        document.getElementById("application-status").value =
+          document.getElementById(`td_status_${applicationId}`).innerText.trim();
+
+        document
+          .getElementById("apply-section")
+          .scrollIntoView({ behavior: "smooth" });
+
+        document.getElementById("status").textContent =
+          "Editing application " + applicationId + ".";
+      }
+
+      async function deleteApplication(applicationId, btnEl) {
+        const statusEl = document.getElementById("status");
+
+        if (!confirm(`Delete application ${applicationId}?`)) return;
 
         btnEl.disabled = true;
-        statusEl.textContent = "Deleting...";
+        statusEl.textContent = "Deleting application...";
 
-        try {
-          //  Ask Supabase to return the deleted row
-          // This code removes a specific student from the database using their ID and confirms that the row was deleted.
-          const { data, error } = await supabaseClient
-            .from("support")
-            .delete()
-            .eq("id", id) //
-            .select("id"); // very important to select something to get the deleted row back
+        const { error } = await supabaseClient
+          .from("applications")
+          .delete()
+          .eq("application_id", applicationId);
 
-          if (error) {
-            console.error("Delete error:", error);
-            statusEl.textContent = "Delete failed: " + (error.message || "");
-            return;
-          }
-
-         // If Supabase deleted 0 rows, do NOT remove from UI
-          if (!data || data.length === 0) {
-            statusEl.textContent =
-              "Not deleted in Supabase (0 rows). Check RLS policy / ID type.";
-            return;
-          }
-
-          // Remove the deleted student's row from the table, shows a confirmation message, and re-enables the button.
-          const rowEl = btnEl.closest("tr");
-          if (rowEl) rowEl.remove();
-
-          statusEl.textContent = "Query deleted ✔";
-          setTimeout(() => (statusEl.textContent = ""), 1200);
-        } finally {
+        if (error) {
+          statusEl.textContent = "Delete failed: " + error.message;
           btnEl.disabled = false;
+          return;
         }
+
+        const rowEl = btnEl.closest("tr");
+        if (rowEl) rowEl.remove();
+
+        statusEl.textContent = "Application deleted successfully.";
+      }
+
+      function clearForm() {
+        editingApplicationId = null;
+        document.getElementById("student-id").value = "";
+        document.getElementById("event-id").value = "";
+        document.getElementById("application-date").value = "";
+        document.getElementById("application-status").value = "";
+        document.getElementById("status").textContent = "";
+      }
+
+      function formatTime(timeValue) {
+        if (!timeValue) return "";
+        return timeValue.slice(0, 5);
       }
     </script>
-</head>
-<body>
-    <nav class="navbar">
-      <span class="nav-title">Society Events Portal</span>
-      <div class="nav-links">
-      <a href="../homepage/index.html">Home</a>
-      <a href="../events/index.html">Events</a>
-      <a href="#">Societies</a>
-      <a href="../rooms/index.html">Library</a>
-      <a href="../Supportpage/index.html">Support</a>
-      </div>
-    </nav>   
-<div class="container">
-  <section class="table-section">
-    <h2>Available Events</h2>
-    <p id="status"></p>
+  </head>
 
-    <table>
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Name</th>
-          <th>Society</th>
-          <th>Date</th>
-          <th>Time</th>
-          <th>Location</th>
-        </tr>
-      </thead>
-      <tbody id="eventsTableBody"></tbody>
-    </table>
-  </section>
-</div>
-    
-</body>
+  <body>
+    <header>
+      <nav class="navbar">
+        <h1>Events Portal</h1>
+        <ul class="nav-links">
+          <li><a href="../homepage/index.html">Home</a></li>
+          <li><a href="../events/index.html">Home</a></li>
+          <li><a href="../Supportpage/index.html">Support</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main class="container">
+      <section class="hero-section">
+        <h2>Student Events and Applications</h2>
+        <p>
+          Browse available events, apply and manage your
+          applications.
+        </p>
+
+        <img
+          src="OIP.png"
+          alt="Students attending university events"
+          class="hero-image"
+        />
+      </section>
+
+      <section class="jump-section">
+        <h3>Go to Section</h3>
+        <div class="jump-menu">
+          <label for="page-jump">Choose a section:</label>
+          <select id="page-jump">
+            <option value="">Select</option>
+            <option value="#events-section">Show Events</option>
+            <option value="#apply-section">Apply for Event</option>
+            <option value="#applications-section">Show My Applications</option>
+          </select>
+        </div>
+      </section>
+
+      <section id="events-section" class="table-section">
+        <h3>Available Events</h3>
+        <p class="section-text">
+          Events are retrieved directly from the database. Click Apply to use
+          the selected event in the application form.
+        </p>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Event ID</th>
+              <th>Event Name</th>
+              <th>Date</th>
+              <th>Time</th>
+              <th>Location</th>
+              <th>Society ID</th>
+              <th>Apply</th>
+            </tr>
+          </thead>
+          <tbody id="events-table">
+            <tr>
+              <td colspan="7">Loading events...</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="apply-section" class="form-section">
+        <h3>Apply for an Event</h3>
+        <p class="section-text">
+          The application ID is generated automatically by the database.
+        </p>
+
+        <form class="application-form">
+          <div class="form-group">
+            <label for="student-id">Student ID</label>
+            <input
+              type="number"
+              id="student-id"
+              placeholder="Enter your student ID"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="event-id">Event ID</label>
+            <input
+              type="number"
+              id="event-id"
+              placeholder="Selected event ID"
+              readonly
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="application-date">Application Date</label>
+            <input type="date" id="application-date" />
+          </div>
+
+          <div class="form-group">
+            <label for="application-status">Status</label>
+            <select id="application-status">
+              <option value="">Select status</option>
+              <option value="Pending">Pending</option>
+              <option value="Submitted">Submitted</option>
+              <option value="Approved">Approved</option>
+            </select>
+          </div>
+
+          <div class="form-buttons">
+            <button type="button" id="submit-btn">Submit Application</button>
+            <button type="button" id="clear-btn" class="secondary-btn">
+              Clear
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <section id="applications-section" class="table-section">
+        <h3>My Applications</h3>
+        <p class="section-text">
+          Applications are retrieved from the database and can be edited or
+          deleted.
+        </p>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Application ID</th>
+              <th>Student ID</th>
+              <th>Event ID</th>
+              <th>Application Date</th>
+              <th>Status</th>
+              <th>Edit</th>
+              <th>Delete</th>
+            </tr>
+          </thead>
+
+          <tbody id="applications-table">
+            <tr>
+              <td colspan="7">Loading applications...</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <div id="status" class="status"></div>
+    </main>
+  </body>
 </html>
