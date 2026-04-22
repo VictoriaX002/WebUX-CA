@@ -22,7 +22,7 @@
       window.addEventListener("DOMContentLoaded", async () => {
         supabaseClient = window.supabase.createClient(
           SUPABASE_URL,
-          SUPABASE_ANON_KEY
+          SUPABASE_ANON_KEY,
         );
 
         await loadEvents();
@@ -51,13 +51,19 @@
         const tableBody = document.getElementById("events-table");
         const statusEl = document.getElementById("status");
 
-        tableBody.innerHTML =
-          '<tr><td colspan="7">Loading events...</td></tr>';
+        tableBody.innerHTML = '<tr><td colspan="7">Loading events...</td></tr>';
 
         const { data, error } = await supabaseClient
           .from("events")
           .select(
-            "event_id, event_name, event_date, event_time, event_location, society_id"
+            `
+  event_id,
+  event_name,
+  event_date,
+  event_time,
+  event_location,
+  societies ( society_name )
+`,
           )
           .order("event_id", { ascending: true });
 
@@ -69,8 +75,7 @@
         }
 
         if (!data || data.length === 0) {
-          tableBody.innerHTML =
-            '<tr><td colspan="7">No events found</td></tr>';
+          tableBody.innerHTML = '<tr><td colspan="7">No events found</td></tr>';
           statusEl.textContent = "No events available.";
           return;
         }
@@ -81,18 +86,18 @@
           const row = document.createElement("tr");
 
           row.innerHTML = `
-            <td>${eventItem.event_id ?? ""}</td>
-            <td>${eventItem.event_name ?? ""}</td>
-            <td>${eventItem.event_date ?? ""}</td>
-            <td>${formatTime(eventItem.event_time)}</td>
-            <td>${eventItem.event_location ?? ""}</td>
-            <td>${eventItem.society_id ?? ""}</td>
-            <td>
-              <button class="btn-apply" onclick="applyForEvent(${eventItem.event_id})">
-                Apply
-              </button>
-            </td>
-          `;
+  <td>${eventItem.event_id ?? ""}</td>
+  <td>${eventItem.event_name ?? ""}</td>
+  <td>${eventItem.event_date ?? ""}</td>
+  <td>${formatTime(eventItem.event_time)}</td>
+  <td>${eventItem.event_location ?? ""}</td>
+  <td>${eventItem.societies?.society_name ?? ""}</td>
+  <td>
+    <button class="btn-apply" onclick="applyForEvent(${eventItem.event_id})">
+      Apply
+    </button>
+  </td>
+`;
 
           tableBody.appendChild(row);
         });
@@ -102,7 +107,6 @@
 
       function applyForEvent(eventId) {
         document.getElementById("event-id").value = eventId;
-        document.getElementById("application-status").value = "Pending";
 
         const today = new Date().toISOString().split("T")[0];
         document.getElementById("application-date").value = today;
@@ -120,18 +124,18 @@
         const statusEl = document.getElementById("status");
 
         tableBody.innerHTML =
-          '<tr><td colspan="7">Loading applications...</td></tr>';
+          '<tr><td colspan="6">Loading applications...</td></tr>';
 
         const { data, error } = await supabaseClient
           .from("applications")
           .select(
-            "application_id, student_id, event_id, application_date, status"
+            "application_id, student_id, event_id, application_date, reason_to_join",
           )
           .order("application_id", { ascending: true });
 
         if (error) {
           tableBody.innerHTML =
-            '<tr><td colspan="7">Error loading applications</td></tr>';
+            '<tr><td colspan="6">Error loading applications</td></tr>';
           statusEl.textContent =
             "Failed to load applications: " + error.message;
           return;
@@ -139,7 +143,7 @@
 
         if (!data || data.length === 0) {
           tableBody.innerHTML =
-            '<tr><td colspan="7">No applications found</td></tr>';
+            '<tr><td colspan="6">No applications found</td></tr>';
           statusEl.textContent = "";
           return;
         }
@@ -161,9 +165,6 @@
             </td>
             <td id="td_app_date_${application.application_id}">
               ${application.application_date ?? ""}
-            </td>
-            <td id="td_status_${application.application_id}">
-              ${application.status ?? ""}
             </td>
             <td>
               <button class="btn-edit" onclick="editApplication(${application.application_id})">
@@ -192,11 +193,12 @@
         const eventId = document.getElementById("event-id").value.trim();
         const applicationDate =
           document.getElementById("application-date").value;
-        const applicationStatus =
-          document.getElementById("application-status").value;
-
-        if (!studentId || !eventId || !applicationDate || !applicationStatus) {
-          statusEl.textContent = "Please complete all fields.";
+        const reasonToJoin = document
+          .getElementById("reason-to-join")
+          .value.trim();
+        if (!studentId || !eventId || !applicationDate || !reasonToJoin) {
+          document.getElementById("form-message").textContent =
+            "Please complete all fields.";
           return;
         }
 
@@ -211,20 +213,18 @@
               student_id: Number(studentId),
               event_id: Number(eventId),
               application_date: applicationDate,
-              status: applicationStatus,
+              reason_to_join: reasonToJoin,
             })
             .eq("application_id", editingApplicationId);
         } else {
-          result = await supabaseClient
-            .from("applications")
-            .insert([
-              {
-                student_id: Number(studentId),
-                event_id: Number(eventId),
-                application_date: applicationDate,
-                status: applicationStatus,
-              },
-            ]);
+          result = await supabaseClient.from("applications").insert([
+            {
+              student_id: Number(studentId),
+              event_id: Number(eventId),
+              application_date: applicationDate,
+              reason_to_join: reasonToJoin,
+            },
+          ]);
         }
 
         if (result.error) {
@@ -232,28 +232,28 @@
           return;
         }
 
+        const wasEditing = editingApplicationId !== null;
         clearForm();
         await loadApplications();
-        statusEl.textContent =
-          editingApplicationId === null
-            ? "Application submitted successfully."
-            : "Application updated successfully.";
+        statusEl.textContent = wasEditing
+          ? "Application updated successfully."
+          : "Application submitted successfully.";
       }
 
       function editApplication(applicationId) {
         editingApplicationId = applicationId;
 
-        document.getElementById("student-id").value =
-          document.getElementById(`td_student_id_${applicationId}`).innerText.trim();
+        document.getElementById("student-id").value = document
+          .getElementById(`td_student_id_${applicationId}`)
+          .innerText.trim();
 
-        document.getElementById("event-id").value =
-          document.getElementById(`td_event_id_${applicationId}`).innerText.trim();
+        document.getElementById("event-id").value = document
+          .getElementById(`td_event_id_${applicationId}`)
+          .innerText.trim();
 
-        document.getElementById("application-date").value =
-          document.getElementById(`td_app_date_${applicationId}`).innerText.trim();
-
-        document.getElementById("application-status").value =
-          document.getElementById(`td_status_${applicationId}`).innerText.trim();
+        document.getElementById("application-date").value = document
+          .getElementById(`td_app_date_${applicationId}`)
+          .innerText.trim();
 
         document
           .getElementById("apply-section")
@@ -293,7 +293,6 @@
         document.getElementById("student-id").value = "";
         document.getElementById("event-id").value = "";
         document.getElementById("application-date").value = "";
-        document.getElementById("application-status").value = "";
         document.getElementById("status").textContent = "";
       }
 
@@ -310,7 +309,7 @@
         <h1>Events Portal</h1>
         <ul class="nav-links">
           <li><a href="../homepage/index.html">Home</a></li>
-          <li><a href="../events/index.html">Home</a></li>
+          <li><a href="../events/index.html">Events</a></li>
           <li><a href="../Supportpage/index.html">Support</a></li>
         </ul>
       </nav>
@@ -319,29 +318,26 @@
     <main class="container">
       <section class="hero-section">
         <h2>Student Events and Applications</h2>
-        <p>
-          Browse available events, apply and manage your
-          applications.
-        </p>
-
+        <p>Browse available events, apply and manage your applications.</p>
+        <section class="jump-section">
+          <h3>Go to Section</h3>
+          <div class="jump-menu">
+            <label for="page-jump">Choose a section:</label>
+            <select id="page-jump">
+              <option value="">Select</option>
+              <option value="#events-section">Show Events</option>
+              <option value="#apply-section">Apply for Event</option>
+              <option value="#applications-section">
+                Show My Applications
+              </option>
+            </select>
+          </div>
+        </section>
         <img
           src="OIP.png"
           alt="Students attending university events"
           class="hero-image"
         />
-      </section>
-
-      <section class="jump-section">
-        <h3>Go to Section</h3>
-        <div class="jump-menu">
-          <label for="page-jump">Choose a section:</label>
-          <select id="page-jump">
-            <option value="">Select</option>
-            <option value="#events-section">Show Events</option>
-            <option value="#apply-section">Apply for Event</option>
-            <option value="#applications-section">Show My Applications</option>
-          </select>
-        </div>
       </section>
 
       <section id="events-section" class="table-section">
@@ -359,7 +355,7 @@
               <th>Date</th>
               <th>Time</th>
               <th>Location</th>
-              <th>Society ID</th>
+              <th>Society name</th>
               <th>Apply</th>
             </tr>
           </thead>
@@ -401,15 +397,13 @@
             <label for="application-date">Application Date</label>
             <input type="date" id="application-date" />
           </div>
-
-          <div class="form-group">
-            <label for="application-status">Status</label>
-            <select id="application-status">
-              <option value="">Select status</option>
-              <option value="Pending">Pending</option>
-              <option value="Submitted">Submitted</option>
-              <option value="Approved">Approved</option>
-            </select>
+          <div class="form-group full-width">
+            <label for="reason-to-join">Reason to Join</label>
+            <textarea
+              id="reason-to-join"
+              placeholder="Tell us why you want to join this event"
+              rows="4"
+            ></textarea>
           </div>
 
           <div class="form-buttons">
@@ -435,7 +429,6 @@
               <th>Student ID</th>
               <th>Event ID</th>
               <th>Application Date</th>
-              <th>Status</th>
               <th>Edit</th>
               <th>Delete</th>
             </tr>
@@ -443,7 +436,7 @@
 
           <tbody id="applications-table">
             <tr>
-              <td colspan="7">Loading applications...</td>
+              <td colspan="6">Loading applications...</td>
             </tr>
           </tbody>
         </table>

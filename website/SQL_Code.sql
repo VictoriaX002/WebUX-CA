@@ -122,10 +122,12 @@ CREATE TABLE applications ( /*Haya Darwish */
   student_id INT,
   event_id INT,
   application_date DATE,
-  status VARCHAR(50),
+  reason_to_join TEXT,
   FOREIGN KEY (student_id) REFERENCES students(id),
   FOREIGN KEY (event_id) REFERENCES events(event_id)
 );
+
+
 
 
 
