@@ -28,35 +28,63 @@ body {
   min-height: 100vh;
 }
 
-.hero {
-  background: linear-gradient(135deg, var(--primary-dark), var(--primary), var(--accent));
-  color: white;
-  text-align: center;
-  padding: 60px 20px 70px;
-  border-bottom-left-radius: 28px;
-  border-bottom-right-radius: 28px;
-  box-shadow: var(--shadow);
+/* NAVBAR */
+header {
+  background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+  box-shadow: 0 4px 14px rgba(11, 11, 158, 0.18);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
-.hero-content {
-  max-width: 800px;
+.navbar {
+  width: min(95%, 1200px);
   margin: 0 auto;
+  padding: 18px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
 }
 
-.hero h1 {
-  font-size: 2.6rem;
-  margin-bottom: 12px;
-  letter-spacing: 0.4px;
+.navbar h1 {
+  color: white;
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: 0.3px;
 }
 
-.hero p {
-  font-size: 1.05rem;
-  opacity: 0.96;
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 22px;
+  align-items: center;
 }
 
+.nav-links li {
+  list-style: none;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 8px 0;
+  transition: 0.2s ease;
+  border-bottom: 2px solid transparent;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+  border-bottom: 2px solid white;
+  opacity: 0.95;
+}
+
+/* MAIN LAYOUT */
 .container {
   width: min(92%, 1200px);
-  margin: -32px auto 36px;
+  margin: 35px auto 36px;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 24px;
@@ -99,28 +127,12 @@ h2 {
 
 .section-text {
   color: var(--muted);
-  font-size: 0.95rem;
+  font-size: 0.98rem;
   margin-bottom: 18px;
+  line-height: 1.6;
 }
 
-.section-heading {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 18px;
-  flex-wrap: wrap;
-}
-
-.badge {
-  background: var(--primary-light);
-  color: var(--primary-dark);
-  padding: 7px 12px;
-  border-radius: 999px;
-  font-size: 0.85rem;
-  font-weight: 700;
-}
-
+/* FORM */
 .join-form {
   display: grid;
   gap: 16px;
@@ -214,6 +226,7 @@ select:focus {
   border: 1px solid #fca5a5;
 }
 
+/* SOCIETY CARDS */
 .society-list {
   display: grid;
   gap: 18px;
@@ -273,6 +286,7 @@ select:focus {
   margin: 7px 0;
   font-size: 14px;
   color: #374151;
+  line-height: 1.5;
 }
 
 .category-tag {
@@ -314,6 +328,7 @@ select:focus {
   color: #374151;
 }
 
+/* MEMBERS SECTION */
 .members-header {
   display: flex;
   justify-content: space-between;
@@ -363,18 +378,32 @@ tr:hover td {
   border-radius: 14px;
 }
 
+/* FOOTER */
+.footer {
+  background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+  color: white;
+  text-align: center;
+  padding: 18px 10px;
+  margin-top: 30px;
+}
+
+/* RESPONSIVE */
 @media (max-width: 900px) {
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .nav-links {
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+
   .container {
     grid-template-columns: 1fr;
-    margin-top: -20px;
   }
 
-  .hero h1 {
-    font-size: 2rem;
-  }
-
-  .members-header,
-  .section-heading {
+  .members-header {
     flex-direction: column;
     align-items: flex-start;
   }

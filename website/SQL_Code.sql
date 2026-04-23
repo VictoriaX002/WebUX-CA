@@ -68,7 +68,7 @@ CREATE TABLE support (
 );
 
 INSERT INTO support (name,feedback_type,support_query)
-VALUES('Jane Doe', 'Events', 'Test Query')
+VALUES('Jane Doe', 'Events', 'Test Query');
 
 
 /* Students Table - Abdurahman Bouderbala */
