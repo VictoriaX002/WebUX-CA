@@ -228,34 +228,6 @@ for insert
 to anon
 with check (true);
 
-/*Events*/
-alter table public.events enable row level security;
-
-create policy "allow select for anon"
-on public.events
-for select
-to anon
-using (true);
-
-create policy "allow delete for anon"
-on public.events
-for delete
-to anon
-using (true);
-
-create policy "allow update for anon"
-on public.events
-for update
-to anon
-using (true)
-with check (true);
-
-create policy "allow insert for anon"
-on public.events
-for insert
-to anon
-with check (true);
-
 /*Socieites*/
 alter table public.societies enable row level security;
 
@@ -280,6 +252,34 @@ with check (true);
 
 create policy "allow insert for anon"
 on public.societies
+for insert
+to anon
+with check (true);
+
+/*Events*/
+alter table public.events enable row level security;
+
+create policy "allow select for anon"
+on public.events
+for select
+to anon
+using (true);
+
+create policy "allow delete for anon"
+on public.events
+for delete
+to anon
+using (true);
+
+create policy "allow update for anon"
+on public.events
+for update
+to anon
+using (true)
+with check (true);
+
+create policy "allow insert for anon"
+on public.events
 for insert
 to anon
 with check (true);
