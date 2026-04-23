@@ -1,33 +1,93 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CA</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
-    <script defer>
-    const SUPABASE_URL = "https://kmgwkyrdimsrvhnngdrw.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZ3dreXJkaW1zcnZobm5nZHJ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI4ODI4OTQsImV4cCI6MjA4ODQ1ODg5NH0.pvzNz4GRQ6l7wtmz6iAXSMlz6LlUVOGGKwp19E7HQN0";
-    let supabaseClient;
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Campus Life Companion</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <nav class="navbar">
+        <h1>Campus Life Companion</h1>
+        <ul class="nav-links">
+          <li><a href="../homepage/index.html">Home</a></li>
+          <li><a href="../events/index.html">Events</a></li>
+          <li><a href="../societies/index.html">Societies</a></li>
+          <li><a href="../rooms/index.html">Rooms</a></li>
+          <li><a href="../Supportpage/index.html">Support</a></li>
+        </ul>
+      </nav>
+    </header>
 
-    window.addEventListener("DOMContentLoaded", async () => {
-        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        await TempFunction();
-        });
-    </script>
-</head>
-<body>
-    <nav class="navbar">
-      <span class="nav-title">Library Bookings</span>
-      <div class="nav-links">
-      <a href="../homepage/index.html">Home</a>
-      <a href="../events/index.html">Events</a>
-      <a href="#">Societies</a>
-      <a href="#">Library</a>
-      <a href="#">Support</a>
-      </div>
+    <main class="container">
+      <section class="hero-section">
+        <div class="hero-text">
+          <h2>Welcome to Campus Life Companion</h2>
+          <p>
+            A student-centred platform designed to make university life easier.
+            Browse events, explore societies, check room information, and access
+            support services in one place.
+          </p>
+          <a href="../events/index.html" class="hero-btn">Explore Events</a>
+        </div>
 
-    </nav>   
-</body>
+        <div class="hero-image-box">
+          <img
+            src="campus-home.jpg"
+            alt="University students on campus"
+            class="hero-image"
+          />
+        </div>
+      </section>
+
+      <section class="features-section">
+        <h3>Quick Access</h3>
+
+        <div class="card-grid">
+          <a href="../events/index.html" class="feature-card">
+            <h4>Events</h4>
+            <p>
+              View upcoming university events and apply to join activities.
+            </p>
+          </a>
+
+          <a href="../societies/index.html" class="feature-card">
+            <h4>Societies</h4>
+            <p>
+              Discover student societies and learn more about campus communities.
+            </p>
+          </a>
+
+          <a href="../rooms/index.html" class="feature-card">
+            <h4>Rooms</h4>
+            <p>
+              Access room-related information and explore available spaces.
+            </p>
+          </a>
+
+          <a href="../Supportpage/index.html" class="feature-card">
+            <h4>Support</h4>
+            <p>
+              Get help and find the right support resources for your needs.
+            </p>
+          </a>
+        </div>
+      </section>
+
+      <section class="about-section">
+        <h3>About the Platform</h3>
+        <p>
+          Universities often provide information through different systems,
+          websites, and emails. This platform brings important student services
+          together into one simple and accessible space, helping students find
+          what they need more quickly and easily.
+        </p>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>&copy; 2026 Campus Life Companion. All rights reserved.</p>
+    </footer>
+  </body>
 </html>
