@@ -1,7 +1,11 @@
 /* Students Table - Victoria Bieganska */
+drop table if exists applications;
+drop table if exists society_members;
+drop table if exists products;
 drop table if exists support;
-drop table if exists societies;
 drop table if exists events;
+drop table if exists rooms;
+drop table if exists societies;
 drop table if exists students;
 
 create table students (
@@ -45,6 +49,15 @@ VALUES
 ('Music Society', 'Creative', 'For students who enjoy playing instruments and performing music.', 'Tuesday', 'music@college.ie'),
 
 ('Islamic Society', 'Cultural', 'A society that supports Muslim students through events, talks, and community activities.', 'Friday', 'isoc@college.ie');
+
+CREATE TABLE society_members (
+  membership_id SERIAL PRIMARY KEY,
+  student_id INT NOT NULL,
+  student_name VARCHAR(255) NOT NULL,
+  society_id INT NOT NULL,
+  join_date DATE DEFAULT CURRENT_DATE,
+  FOREIGN KEY (society_id) REFERENCES societies(society_id)
+);
 
 CREATE TABLE support (
   id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -184,6 +197,33 @@ with check (true);
 
 create policy "allow insert for anon"
 on public.students
+for insert
+to anon
+with check (true);
+/*Society Members*/
+alter table public.society_members enable row level security;
+
+create policy "allow select for anon"
+on public.society_members
+for select
+to anon
+using (true);
+
+create policy "allow delete for anon"
+on public.society_members
+for delete
+to anon
+using (true);
+
+create policy "allow update for anon"
+on public.society_members
+for update
+to anon
+using (true)
+with check (true);
+
+create policy "allow insert for anon"
+on public.society_members
 for insert
 to anon
 with check (true);
