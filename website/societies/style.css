@@ -5,25 +5,25 @@
 }
 
 :root {
-  --primary: #2563eb;
-  --primary-dark: #1e3a8a;
-  --primary-light: #dbeafe;
-  --accent: #60a5fa;
-  --bg: #f4f8ff;
-  --surface: rgba(255, 255, 255, 0.95);
+  --primary: #0b0b9e;
+  --primary-dark: #070772;
+  --primary-light: #d9d9ff;
+  --accent: #3f46d8;
+  --bg: #f4f6ff;
+  --surface: rgba(255, 255, 255, 0.96);
   --text: #1f2937;
   --muted: #6b7280;
-  --border: #dbeafe;
+  --border: #d9dcff;
   --success-bg: #dcfce7;
   --success-text: #166534;
   --error-bg: #fee2e2;
   --error-text: #991b1b;
-  --shadow: 0 12px 30px rgba(30, 58, 138, 0.12);
+  --shadow: 0 12px 30px rgba(11, 11, 158, 0.14);
 }
 
 body {
   font-family: Arial, sans-serif;
-  background: linear-gradient(180deg, #ebf3ff 0%, #f8fbff 100%);
+  background: linear-gradient(180deg, #eef0ff 0%, #f8f9ff 100%);
   color: var(--text);
   min-height: 100vh;
 }
@@ -65,7 +65,7 @@ body {
 .card {
   background: var(--surface);
   backdrop-filter: blur(8px);
-  border: 1px solid rgba(219, 234, 254, 0.95);
+  border: 1px solid rgba(217, 220, 255, 0.95);
   border-radius: 22px;
   padding: 24px;
   box-shadow: var(--shadow);
@@ -83,7 +83,7 @@ body {
   right: -55px;
   width: 150px;
   height: 150px;
-  background: rgba(96, 165, 250, 0.16);
+  background: rgba(63, 70, 216, 0.12);
   border-radius: 50%;
 }
 
@@ -154,7 +154,7 @@ input:focus,
 select:focus {
   outline: none;
   border-color: var(--primary);
-  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+  box-shadow: 0 0 0 4px rgba(11, 11, 158, 0.12);
 }
 
 .primary-btn {
@@ -171,7 +171,7 @@ select:focus {
 
 .primary-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.22);
+  box-shadow: 0 8px 18px rgba(11, 11, 158, 0.24);
 }
 
 .leave-btn {
@@ -220,7 +220,7 @@ select:focus {
 }
 
 .society-item {
-  background: linear-gradient(180deg, #ffffff, #f8fbff);
+  background: linear-gradient(180deg, #ffffff, #f8f9ff);
   border: 1px solid var(--border);
   border-radius: 18px;
   padding: 20px;
@@ -230,7 +230,7 @@ select:focus {
 
 .society-item:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 22px rgba(37, 99, 235, 0.08);
+  box-shadow: 0 12px 22px rgba(11, 11, 158, 0.08);
 }
 
 .society-top {
@@ -251,7 +251,7 @@ select:focus {
   justify-content: center;
   color: white;
   font-size: 22px;
-  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.18);
+  box-shadow: 0 8px 18px rgba(11, 11, 158, 0.2);
 }
 
 .society-main {
@@ -262,7 +262,7 @@ select:focus {
 
 .society-name {
   margin: 0;
-  color: var(--primary-dark);
+  color: #070772;
   font-size: 1.5rem;
   font-weight: 900;
   letter-spacing: 0.3px;
@@ -285,27 +285,27 @@ select:focus {
 }
 
 .tag-entertainment {
-  background: #ede9fe;
-  color: #6d28d9;
+  background: #ececff;
+  color: #4c1d95;
 }
 
 .tag-academic {
-  background: #dbeafe;
-  color: #1d4ed8;
+  background: #d9d9ff;
+  color: #0b0b9e;
 }
 
 .tag-fitness {
-  background: #dcfce7;
+  background: #e7f8ec;
   color: #15803d;
 }
 
 .tag-creative {
-  background: #fce7f3;
+  background: #f8e8f3;
   color: #be185d;
 }
 
 .tag-cultural {
-  background: #fef3c7;
+  background: #fff3d6;
   color: #b45309;
 }
 
@@ -350,7 +350,7 @@ th {
 }
 
 tr:hover td {
-  background: #f8fbff;
+  background: #f8f9ff;
 }
 
 .empty-state {
@@ -358,8 +358,8 @@ tr:hover td {
   padding: 28px;
   color: var(--muted);
   font-style: italic;
-  background: #f8fbff;
-  border: 1px dashed #bfdbfe;
+  background: #f8f9ff;
+  border: 1px dashed #bfc4ff;
   border-radius: 14px;
 }
 
