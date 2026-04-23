@@ -90,23 +90,38 @@ VALUES
 
 
 /* Student Marketplace - Peace Azeta */
+CREATE TABLE IF NOT EXISTS students (
+  id INT PRIMARY KEY,
+  first_name VARCHART(255),
+  last_name VARCHART(255),
+  student_num INT
+);
+
+INSERT INTO students (id, first_name, last_name, student_num)
+VALUES
+(1, 'John', 'Doe', 1234),
+(2, 'Jane', 'Doe', 5678),
+(3, 'Patrick', 'Jane', 1274);
+
+/* Products Table */
 CREATE TABLE IF NOT EXISTS products (
   id SERIAL PRIMARY KEY,
   title TEXT NOT NULL,
   description TEXT,
   price NUMERIC,
   student_id INT,
-  is_deleted BOOLEAN DEFAULT FALSE,
+  is_deleted BOOLENA DEFAULT FALSE,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (student_id) REFERENCES students(id)
 );
 
-/* Sample data */
+/* Example Data */
 INSERT INTO products (title, description, price, student_id)
 VALUES
 ('Laptop', 'Good condition', 500, 1),
 ('Notebook', 'With notes', 20, 2),
 ('Sweater', 'Brand new', 33, 3);
+
 
 create table events (  /*Haya Darwish */
   event_id SERIAL PRIMARY KEY,
