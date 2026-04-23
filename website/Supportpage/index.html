@@ -126,7 +126,8 @@
       
       // 4) In add mode, adds a new row into the database and the table,
       // 4) In edit mode, updates the current values to the edited values in the database and the table
-      async function addSupport() {
+      async function addSupport(e) {
+        e.preventDefault();
         const statusEl = document.getElementById("status");
         const nameInput = document.getElementById("name-input");
         const feedbackTypeSelect = document.getElementById(
