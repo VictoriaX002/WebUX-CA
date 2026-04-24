@@ -158,7 +158,7 @@ body {
   }
 }
 
-@media (max-width: 700px) {
+@media  (max-width: 700px) {
   .navbar {
     flex-direction: column;
     gap: 12px;
